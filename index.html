@@ -249,7 +249,7 @@
                 title: "COUPE",
                 artist: "LIL.FENTY",
                 cover: "https://i.imgur.com/rSUrx2Q.jpeg",
-                audio: "https://drive.google.com/uc?export=download&id=1TP_zEiHTmlMmahA14xikHp5lqGLVlT0w"
+                audio: "https://storage.googleapis.com/limewire-assets/9d5e1b6f-0e7b-4d7d-9e8e-9e8e9d5e1b6f/LrGy9.mp3" // Nowy link z LimeWire
             }
         ];
 
@@ -344,17 +344,27 @@
 
         // Odtwarzanie muzyki
         function playSong(song) {
+            // Najpierw zatrzymaj obecne odtwarzanie
+            audioPlayer.pause();
+            
+            // Ustaw nowe źródło
             audioPlayer.src = song.audio;
-            audioPlayer.play()
-                .then(() => {
-                    nowPlayingTitle.textContent = song.title;
-                    nowPlayingArtist.textContent = song.artist;
-                    nowPlayingCover.src = song.cover;
-                })
-                .catch(error => {
-                    console.error("Błąd odtwarzania:", error);
-                    alert("Nie można odtworzyć utworu. Sprawdź link do pliku audio!");
-                });
+            
+            // Spróbuj odtworzyć
+            const playPromise = audioPlayer.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        nowPlayingTitle.textContent = song.title;
+                        nowPlayingArtist.textContent = song.artist;
+                        nowPlayingCover.src = song.cover;
+                    })
+                    .catch(error => {
+                        console.error("Błąd odtwarzania:", error);
+                        alert("Nie można odtworzyć utworu. Sprawdź:\n1. Czy link jest poprawny\n2. Czy plik jest dostępny\n3. Spróbuj innego hostingu");
+                    });
+            }
         }
 
         // Dodawanie nowego utworu (admin)
@@ -394,6 +404,15 @@
                 alert("Wypełnij wszystkie pola!");
             }
         });
+
+        // Testowe odtwarzanie przy ładowaniu strony (tylko dla admina)
+        if (window.location.hash === "#test") {
+            setTimeout(() => {
+                if (musicLibrary.length > 0) {
+                    playSong(musicLibrary[0]);
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
