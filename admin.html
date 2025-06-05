@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Minimal Music</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Panel Admina</h1>
+            <p>Dodawanie i zarządzanie utworami</p>
+        </header>
+        
+        <div class="admin-form">
+            <h2>Dodaj nowy utwór</h2>
+            
+            <form id="songForm">
+                <div class="form-group">
+                    <label for="songName">Nazwa utworu:</label>
+                    <input type="text" id="songName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="artistName">Artysta:</label>
+                    <input type="text" id="artistName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="driveUrl">Link do pliku MP3 (Google Drive):</label>
+                    <input type="url" id="driveUrl" required>
+                    <small>Upewnij się, że plik jest publicznie dostępny</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="coverUrl">Link do okładki (Imgur):</label>
+                    <input type="url" id="coverUrl" required>
+                </div>
+                
+                <button type="submit">Dodaj utwór</button>
+            </form>
+        </div>
+        
+        <div class="song-list">
+            <h2>Aktualne utwory</h2>
+            <ul id="currentSongs">
+                <!-- Lista utworów będzie generowana dynamicznie -->
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 Minimal Music | <a href="index.html">Powrót do strony głównej</a></p>
+    </footer>
+    
+    <script src="admin.js"></script>
+</body>
+</html>
