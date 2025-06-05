@@ -9,7 +9,7 @@
             --black: #000;
             --white: #fff;
             --gray: #222;
-            --accent: #ffffff; /* ZMIENIONE NA BIAŁY */
+            --accent: #ffffff;
             --font-main: 'Arial Black', sans-serif;
         }
         body {
@@ -99,6 +99,7 @@
             border-radius: 10px;
             overflow: hidden;
             transition: transform 0.3s;
+            cursor: pointer;
         }
         .music-card:hover {
             transform: scale(1.03);
@@ -154,6 +155,8 @@
         audio {
             flex-grow: 1;
             max-width: 500px;
+            background: #111;
+            border-radius: 5px;
         }
         .admin-form {
             background: var(--gray);
@@ -301,6 +304,7 @@
             playerBar.style.display = 'none';
             usernameInput.value = '';
             audioPlayer.src = '';
+            audioPlayer.pause();
         }
 
         // Renderowanie muzyki
@@ -333,6 +337,7 @@
                         <div class="music-artist">${song.artist}</div>
                     </div>
                 `;
+                card.addEventListener('click', () => playSong(song));
                 adminMusicGrid.appendChild(card);
             });
         }
@@ -340,20 +345,32 @@
         // Odtwarzanie muzyki
         function playSong(song) {
             audioPlayer.src = song.audio;
-            audioPlayer.play();
-            nowPlayingTitle.textContent = song.title;
-            nowPlayingArtist.textContent = song.artist;
-            nowPlayingCover.src = song.cover;
+            audioPlayer.play()
+                .then(() => {
+                    nowPlayingTitle.textContent = song.title;
+                    nowPlayingArtist.textContent = song.artist;
+                    nowPlayingCover.src = song.cover;
+                })
+                .catch(error => {
+                    console.error("Błąd odtwarzania:", error);
+                    alert("Nie można odtworzyć utworu. Sprawdź link do pliku audio!");
+                });
         }
 
         // Dodawanie nowego utworu (admin)
         addSongBtn.addEventListener('click', function() {
-            const title = document.getElementById('songTitle').value;
-            const artist = document.getElementById('songArtist').value;
-            const cover = document.getElementById('songCover').value;
-            const audio = document.getElementById('songAudio').value;
+            const title = document.getElementById('songTitle').value.trim();
+            const artist = document.getElementById('songArtist').value.trim();
+            const cover = document.getElementById('songCover').value.trim();
+            const audio = document.getElementById('songAudio').value.trim();
             
             if (title && artist && cover && audio) {
+                // Sprawdź czy link do MP3 jest poprawny
+                if (!audio.startsWith('http')) {
+                    alert("Link do MP3 musi zaczynać się od http:// lub https://");
+                    return;
+                }
+
                 const newSong = {
                     id: Date.now(),
                     title,
